@@ -1,0 +1,22 @@
+{
+  "name": "cpco7karaoke",
+  "version": "0.0.0",
+  "description": "#CPCO7 Karaoke",
+  "main": "server.js",
+  "scripts": {
+    "start": "forever start server.js",
+    "stop": "forever stop server.js"
+  },
+  "keywords": [
+    "cpco7",
+    "karaoke",
+    "gentebool"
+  ],
+  "dependencies": {
+    "express": "latest",
+    "redis": "^0.10.3",
+    "socket.io": "latest"
+  },
+  "author": "Pablo Dorado <pandres95@gentebool.co>",
+  "license": "GPL"
+}

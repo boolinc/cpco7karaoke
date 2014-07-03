@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CPCO7 Karaoke</title>
+    <!-- Latest compiled and minified CSS -->
+
+
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+    <style>
+    #chatBody{
+        overflow: scroll;
+        height: 450px;
+    }
+    li #chatMessage {
+
+    }
+    </style>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    $(document).ready(function(){
+        var socket = io();
+
+        $('#form').submit(function(){
+            socket.emit('message', $('#twitter').val(), $('#song').val());
+            $('#twitter').val('');
+            $('#song').val('');
+
+            return false;
+        });
+
+
+        socket.on('message', function(data){
+            $('#chatBody').append(
+                $('<li>')
+                .addClass('list-group-item')
+
+                .append(
+                    $('<strong>')
+                    .addClass('list-group-item-heading')
+                    .text('@' + data.twitter)
+                )
+                .append(
+                    $('<p>')
+                    .addClass('list-group-item-text')
+                    .text(data.song)
+                )
+            );
+        });
+    });
+    </script>
+</head>
+<body>
+
+    <header class="page-header">
+        <h1 class="text-center">#CPCO7Karaoke<small> by @GenteBool &amp; @RetretaCultural</small></h1>
+    </header>
+
+    <div class= "roll">
+
+        <div class="panel panel-default" id="chatPanel">
+
+
+            <div class="panel-heading">
+                <h1></h1>
+
+            </div>
+            <ul class="panel-body list-group list-unstyled" id="chatBody"></ul>
+            <div class="panel-footer">
+
+                <form id="form" >
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <div class="input-group-addon">@</div>
+                                <input class="form-control" placeholder="Twitter" id="twitter" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input id="song" type="text" class="form-control" placeholder="Artista - Canción" required>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" id="btn-chat" type="submit">Enviar</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        <h6 class="text-center"> Developed by <a href="http://www.boolinc.co">Bool Inc.</a></h6>
+    </footer>
+</body>
+</html>
