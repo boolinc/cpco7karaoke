@@ -19,12 +19,15 @@ io.on('connection', function(socket){
         }
     });
 
-    //Recibe the request pin
+    //Get a song message
     socket.on('message', function(twitter, song){
-        console.log("[@%s] %s", twitter, song);
+
         record = { twitter: twitter, song: song };
+        console.log("[@%s] %s", twitter, song);
+
         redis.lpush('SONGS', JSON.stringify(record));
         io.emit('message', record);
+
     });
 
     //Disconect
@@ -35,6 +38,7 @@ io.on('connection', function(socket){
 
 // Routing
 app.use(express.static(__dirname + '/public'));
+app.use('/api', require('./api')(express));
 
 server.listen(3001, "127.0.0.1", function(){
     console.log('Server listen on port http://127.0.0.1:3001');
