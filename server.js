@@ -38,7 +38,7 @@ io.on('connection', function(socket){
 
 // Routing
 app.use(express.static(__dirname + '/public'));
-app.use('/api', require('./api')(express));
+app.use('/api', require('./api')(express, redis));
 
 server.listen(3001, "127.0.0.1", function(){
     console.log('Server listen on port http://127.0.0.1:3001');
