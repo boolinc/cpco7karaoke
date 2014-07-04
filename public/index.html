@@ -36,8 +36,21 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
+    var socket = io();
+
+    function like(){
+        alert('like')
+    }
+    function dislike(){
+        alert('dislike')
+    }
+
     $(document).ready(function(){
-        var socket = io();
+
+
+
+
 
         $('#form').submit(function(){
             socket.emit('message', $('#twitter').val(), $('#song').val());
@@ -47,8 +60,9 @@
             return false;
         });
 
-
         socket.on('message', function(data){
+
+            console.log(data)
             $('#chatBody').append(
                 $('<li>')
                 .addClass('list-group-item')
@@ -82,12 +96,14 @@
                             .append(
                                 $('<a>')
                                 .addClass('fa fa-thumbs-down')
-                                .attr('id','onDislike')
+                                .attr('id','dislike')
                                 .attr('href','htttp://CPCO7Karaoke.gentebool.co')
+                                .data('id-type',data.id)
+                                .attr('onclick','dislike()')
                             )
                             .append(
-                                $('h6')
-                                .text('20')
+                                $('<h6>')
+                                .text(data.dislikes)
                             )
                         )
 
@@ -97,13 +113,16 @@
                             .append(
                                 $('<a>')
                                 .addClass('fa fa-thumbs-up')
-                                .attr('id','onLike')
+                                .attr('id','like')
                                 .attr('href','htttp://CPCO7Karaoke.gentebool.co')
+                                .data('id-type',data.id)
+                                .attr('onclick','like()')
                             )
                             .append(
                                 $('<h6>')
-                                .text('1000')
+                                .text(data.likes)
                             )
+
                         )
                     )
                 )
