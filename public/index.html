@@ -23,13 +23,13 @@
         overflow: scroll;
         height: 450px;
     }
-    #dislike, #like{
+    .dislike, .like{
         color : gray;
     }
-    #onDislike{
+    .onDislike{
         color : #d9534f;
     }
-    #onLike{
+    .onLike{
         color : #428bca;
     }
     </style>
@@ -40,12 +40,32 @@
     var socket = io();
 
     function like(id){
+
         console.log(id);
-        socket.emit('like', id);
+
+        if($('#like-'+id).attr('class') == 'fa fa-thumbs-up like'){
+            $('#like-'+id).attr('class', 'fa fa-thumbs-up onLike')
+            socket.emit('like', id);
+        }
+
+        else if($('#like-'+id).attr('class') == 'fa fa-thumbs-up onLike'){
+            $('#like-'+id).attr('class', 'fa fa-thumbs-up like')
+            socket.emit('unlike', id);
+        }
     }
     function dislike(id){
+
         console.log(id);
-        socket.emit('dislike', id);
+
+        if($('#dislike-'+id).attr('class') == 'fa fa-thumbs-down dislike'){
+            $('#dislike-'+id).attr('class', 'fa fa-thumbs-down onDislike')
+            socket.emit('dislike', id);
+        }
+
+        else if($('#dislike-'+id).attr('class') == 'fa fa-thumbs-down onDislike'){
+            $('#dislike-'+id).attr('class', 'fa fa-thumbs-down dislike ')
+            socket.emit('undislike', id);
+        }
     }
 
     $(document).ready(function(){
@@ -93,8 +113,8 @@
                             .addClass('col-md-6')
                             .append(
                                 $('<a>')
-                                .addClass('fa fa-thumbs-down')
-                                .attr('id','dislike')
+                                .addClass('fa fa-thumbs-down dislike')
+                                .attr('id','dislike-'+data.id)
                                 .attr('href','htttp://CPCO7Karaoke.gentebool.co')
                                 .data('id-type',data.id)
                                 .attr('onclick','dislike('+data.id+')')
@@ -110,8 +130,8 @@
                             .addClass('col-md-6')
                             .append(
                                 $('<a>')
-                                .addClass('fa fa-thumbs-up')
-                                .attr('id','like')
+                                .addClass('fa fa-thumbs-up like')
+                                .attr('id','like-' + data.id)
                                 .attr('href','htttp://CPCO7Karaoke.gentebool.co')
                                 .data('id-type',data.id)
                                 .attr('onclick','like('+data.id+')')
