@@ -132,9 +132,7 @@
         });
 
         socket.on('update', function(record){
-            console.log(record)
-            console.log(record.id)
-            console.log();
+
             $('#dislike-numbers-'+record.id).text(''+record.dislikes+'');
             $('#like-numbers-'+record.id).text(''+record.likes+'');
         })
