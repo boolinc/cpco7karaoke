@@ -85,8 +85,7 @@
         $('#form').submit(function(){
             date = new Date();
 
-            console.log(date.getDate());
-            socket.emit('message', $('#twitter').val(), $('#song').val());
+            socket.emit('message', $('#twitter').val(), $('#song').val(), date);
             $('#twitter').val('');
             $('#song').val('');
 
@@ -102,6 +101,15 @@
         })
 
         var message = function(data){
+
+            var primeraM = function(string){ return string.charAt(0).toUpperCase() + string.slice(1); }
+
+            var options = { weekday: "long", year: "numeric", month: "short",
+            day: "numeric", hour:'2-digit', minute: '2-digit', hour12: 'true' };
+
+            date = new Date(data.date);
+
+
             $('#chatBody').append(
                 $('<li>')
                 .addClass('list-group-item')
@@ -179,7 +187,7 @@
                         )
                         .append(
                             $('<small>')
-                            .text(' 12/12/12 12:30 pm')
+                            .text(' ' + primeraM(date.toLocaleDateString("es-CO", options)))
                         )
                     )
                 )
