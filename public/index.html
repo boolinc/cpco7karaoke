@@ -41,7 +41,16 @@
 
     function like(id){
 
-        if($('#like-'+id).attr('class') == 'fa fa-thumbs-up like'){
+        if($('#dislike-'+id).attr('class') == 'fa fa-thumbs-down onDislike'){
+
+            $('#dislike-'+id).attr('class', 'fa fa-thumbs-down dislike');
+            $('#like-'+id).attr('class', 'fa fa-thumbs-up onLike');
+            socket.emit('undislike', id);
+            socket.emit('like', id);
+
+        }
+
+        else if($('#like-'+id).attr('class') == 'fa fa-thumbs-up like'){
             $('#like-'+id).attr('class', 'fa fa-thumbs-up onLike')
             socket.emit('like', id);
         }
@@ -53,13 +62,20 @@
     }
     function dislike(id){
 
-        if($('#dislike-'+id).attr('class') == 'fa fa-thumbs-down dislike'){
-            $('#dislike-'+id).attr('class', 'fa fa-thumbs-down onDislike')
+        if($('#like-'+id).attr('class') == 'fa fa-thumbs-up onLike'){
+            $('#like-'+id).attr('class', 'fa fa-thumbs-up like');
+            $('#dislike-'+id).attr('class', 'fa fa-thumbs-down onDislike');
+            socket.emit('unlike', id);
+            socket.emit('dislike', id);
+        }
+
+        else if($('#dislike-'+id).attr('class') == 'fa fa-thumbs-down dislike'){
+            $('#dislike-'+id).attr('class', 'fa fa-thumbs-down onDislike');
             socket.emit('dislike', id);
         }
 
         else if($('#dislike-'+id).attr('class') == 'fa fa-thumbs-down onDislike'){
-            $('#dislike-'+id).attr('class', 'fa fa-thumbs-down dislike ')
+            $('#dislike-'+id).attr('class', 'fa fa-thumbs-down dislike')
             socket.emit('undislike', id);
         }
     }
@@ -75,7 +91,11 @@
         });
 
         socket.on('update', function(record){
-            
+            console.log(record)
+            console.log(record.id)
+            console.log();
+            $('#dislike-numbers-'+record.id).text(''+record.dislikes+'');
+            $('#like-numbers-'+record.id).text(''+record.likes+'');
         })
 
         socket.on('message', function(data){
@@ -94,7 +114,13 @@
                         .append(
                             $('<strong>')
                             .addClass('list-group-item-heading')
-                            .text('@' + data.twitter)
+                            .append(
+                                $('<a>')
+                                .attr('href', 'http://twitter.com/'+data.twitter)
+                                .attr('target','_blank')
+                                .text('@' + data.twitter)
+                            )
+
                         )
                         .append(
                             $('<p>')
@@ -103,7 +129,8 @@
                         )
                     )
                     .append(
-                            $('<div>')
+
+                        $('<div>')
                         .addClass('col-md-1 row')
 
                         .append(
@@ -135,7 +162,7 @@
                             )
                             .append(
                                 $('<h6>')
-                                .attr('id','like-number-'+data.id)
+                                .attr('id','like-numbers-'+data.id)
                                 .text(data.likes)
                             )
 
