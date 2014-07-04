@@ -116,11 +116,11 @@
                                 .addClass('fa fa-thumbs-down dislike')
                                 .attr('id','dislike-'+data.id)
                                 .attr('href','htttp://CPCO7Karaoke.gentebool.co')
-                                .data('id-type',data.id)
                                 .attr('onclick','dislike('+data.id+')')
                             )
                             .append(
                                 $('<h6>')
+                                .attr('id', 'dislike-numbers-'+data.id)
                                 .text(data.dislikes)
                             )
                         )
@@ -133,11 +133,11 @@
                                 .addClass('fa fa-thumbs-up like')
                                 .attr('id','like-' + data.id)
                                 .attr('href','htttp://CPCO7Karaoke.gentebool.co')
-                                .data('id-type',data.id)
                                 .attr('onclick','like('+data.id+')')
                             )
                             .append(
                                 $('<h6>')
+                                .attr('id','like-number-'+data.id)
                                 .text(data.likes)
                             )
 
