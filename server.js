@@ -10,10 +10,11 @@ function update(redis, socket){
     console.log('Conexión detectada');
     redis.lrange('SONGS', 0, -1, function(err, records){
         if(!err){
+            console.log(records);
             records.forEach(function(record, i){
+                console.log("%s: %s", i, record);
                 record = JSON.parse(record);
                 record['id'] = i;
-                console.log(record);
                 socket.emit('message', record);
             });
         }
@@ -26,44 +27,49 @@ io.on('connection', function(socket){
     update(redis, socket);
 
     // Social events
-    socket.on('like', function(id, record){
+    socket.on('like', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
-            record = songs[0];
+
+            record = JSON.parse(songs[0]);
+
             record.likes += 1;
-            redis.lset('SONGS', id, record);
+            redis.lset('SONGS', id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
         });
     });
 
-    socket.on('unlike', function(record){
+    socket.on('unlike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
-            record = songs[0];
+
+            record = JSON.parse(songs[0]);
             record.likes -= 1;
-            redis.lset('SONGS', id, record);
+            redis.lset('SONGS', id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
         });
     });
 
-    socket.on('dislike', function(record){
+    socket.on('dislike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
-            record = songs[0];
+
+            record = JSON.parse(songs[0]);
             record.dislikes += 1;
-            redis.lset('SONGS', id, record);
+            redis.lset('SONGS', id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
         });
     });
 
-    socket.on('undislike', function(record){
+    socket.on('undislike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
-            record = songs[0];
+
+            record = JSON.parse(songs[0]);
             record.dislikes -= 1;
-            redis.lset('SONGS', id, record);
+            redis.lset('SONGS', id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
