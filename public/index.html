@@ -45,10 +45,10 @@
 
         var res = " ";
         if(dt.setHours(0,0,0,0) == today.setHours(0,0,0,0)){
-            res += moment(data).lang('es', {
+            moment.lang('es', {
                 relativeTime : {
-                    future: "en %s",
-                    past:   "hace %s",
+                    future: "En %s",
+                    past:   "Hace %s",
                     s:  "segundos",
                     m:  "un minuto",
                     mm: "%d minutos",
@@ -61,7 +61,9 @@
                     y:  "un año",
                     yy: "%d años"
                 }
-            }).fromNow(true);
+            });
+            res += moment(data).fromNow();
+
         } else {
 
             var primeraM = function(string){
