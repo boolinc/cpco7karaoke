@@ -80,8 +80,19 @@ io.on('connection', function(socket){
     //Get a song message
     socket.on('message', function(twitter, song){
 
-        record = { twitter: twitter, song: song, likes: 0, dislikes: 0 };
-        console.log("[@%s] %s", twitter, song);
+        record = {
+            twitter: twitter,
+            song: song,
+            likes: 0,
+            dislikes: 0,
+            date: new Date(),
+            toString: function(){
+                return require('util').format("[%s] @%s: %s (%d/%d)",
+                this.date, this.twitter, this.song, this.likes, this.dislikes);
+            }
+        };
+
+        console.log(record.toString());
 
         var res = redis.rpush('SONGS', JSON.stringify(record), function(err, id){
             if (!err){
@@ -100,7 +111,7 @@ io.on('connection', function(socket){
 });
 
 // Routing
-app.use(express.static(__dirname + '/public')); 
+app.use(express.static(__dirname + '/public'));
 
 server.listen(3001, "127.0.0.1", function(){
     console.log('Server listen on port http://127.0.0.1:3001');
