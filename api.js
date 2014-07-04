@@ -14,14 +14,17 @@ module.exports = function(express, redis, io){
         var responseObj = [];
         redis.lrange('SONGS', 0, -1, function(err, records){
             if(!err){
-                for(record in records){
-                    record = records[record];
-                    responseObj.push(JSON.parse(record));
+                for(id in records){
+                    var record = JSON.parse(records[id]);
+                    record['id'] = id;
+                    console.log(record);
+                    responseObj.push(record);
                 }
                 res.status(200).json({success: true, data: responseObj});
             }
         });
     });
+
     router.post('/songs/:id', function(req, res){
         console.log(req.params);
         io.emit('active', {id: req.params.id});
