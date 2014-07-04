@@ -27,6 +27,7 @@ io.on('connection', function(socket){
 
     // Social events
     socket.on('like', function(id, record){
+        console.log(id);
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
             record.likes += 1;
@@ -48,7 +49,7 @@ io.on('connection', function(socket){
         });
     });
 
-    socket.on('dislike', function(record){
+    socket.on('dislike', function(id, record){
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
             record.dislikes += 1;

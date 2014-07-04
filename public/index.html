@@ -39,15 +39,17 @@
 
     var socket = io();
 
-    function like(){
-        alert('like')
+    function like(id){
+        console.log(id);
+        socket.emit('like', id);
     }
-    function dislike(){
-        alert('dislike')
+    function dislike(id){
+        console.log(id);
+        socket.emit('dislike', id);
     }
 
     $(document).ready(function(){
-        
+
         $('#form').submit(function(){
             socket.emit('message', $('#twitter').val(), $('#song').val());
             $('#twitter').val('');
@@ -95,7 +97,7 @@
                                 .attr('id','dislike')
                                 .attr('href','htttp://CPCO7Karaoke.gentebool.co')
                                 .data('id-type',data.id)
-                                .attr('onclick','dislike()')
+                                .attr('onclick','dislike('+data.id+')')
                             )
                             .append(
                                 $('<h6>')
@@ -112,7 +114,7 @@
                                 .attr('id','like')
                                 .attr('href','htttp://CPCO7Karaoke.gentebool.co')
                                 .data('id-type',data.id)
-                                .attr('onclick','like()')
+                                .attr('onclick','like('+data.id+')')
                             )
                             .append(
                                 $('<h6>')
@@ -148,7 +150,6 @@
     <div class= "roll">
 
         <div class="panel panel-default" id="chatPanel">
-
 
             <div class="panel-heading">
             </div>
