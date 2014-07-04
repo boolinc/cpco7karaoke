@@ -1,4 +1,4 @@
-module.exports = function(express, redis){
+module.exports = function(express, redis, io){
 
 
     var router = express.Router();
@@ -18,12 +18,14 @@ module.exports = function(express, redis){
                     record = records[record];
                     responseObj.push(JSON.parse(record));
                 }
-                res.status(200).json(responseObj);
+                res.status(200).json({success: true, data: responseObj});
             }
         });
     });
     router.post('/songs/:id', function(req, res){
-        
+        console.log(req.params);
+        io.emit('active', {id: req.params.id});
+        res.status(200).json({success:true})
     });
 
     return router;
