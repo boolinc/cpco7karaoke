@@ -30,11 +30,12 @@ io.on('connection', function(socket){
         console.log(id);
         redis.lrange('SONGS', id, id, function(err, songs){
 
+            console.log("Songs: %j", songs);
 
-            record = songs[0];
+            record = JSON.parse(songs[0]);
             console.log(record);
             record.likes += 1;
-            redis.lset('SONGS', id, record);
+            redis.lset('SONGS', id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
@@ -44,10 +45,10 @@ io.on('connection', function(socket){
     socket.on('unlike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
 
-            record = songs[0];
+            record = JSON.parse(songs[0]);
             console.log(record);
             record.likes -= 1;
-            redis.lset('SONGS', id, record);
+            redis.lset('SONGS', id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
@@ -57,10 +58,10 @@ io.on('connection', function(socket){
     socket.on('dislike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
 
-            record = songs[0];
+            record = JSON.parse(songs[0]);
             console.log(record);
             record.dislikes += 1;
-            redis.lset('SONGS', id, record);
+            redis.lset('SONGS', id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
@@ -70,10 +71,10 @@ io.on('connection', function(socket){
     socket.on('undislike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
 
-            record = songs[0];
+            record = JSON.parse(songs[0]);
             console.log(record);
             record.dislikes -= 1;
-            redis.lset('SONGS', id, record);
+            redis.lset('SONGS', id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
