@@ -38,7 +38,7 @@ io.on('connection', function(socket){
         });
     });
 
-    socket.on('unlike', function(record){
+    socket.on('unlike', function(id, record){
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
             record.likes -= 1;
@@ -60,7 +60,7 @@ io.on('connection', function(socket){
         });
     });
 
-    socket.on('undislike', function(record){
+    socket.on('undislike', function(id, record){
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
             record.dislikes -= 1;
