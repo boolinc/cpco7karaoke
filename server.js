@@ -30,6 +30,7 @@ io.on('connection', function(socket){
     socket.on('like', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
 
+            console.log(id, songs);
             record = JSON.parse(songs[0]);
 
             record.likes += 1;
@@ -82,9 +83,9 @@ io.on('connection', function(socket){
         record = { twitter: twitter, song: song, likes: 0, dislikes: 0 };
         console.log("[@%s] %s", twitter, song);
 
-        var res = redis.lpush('SONGS', JSON.stringify(record), function(err, id){
+        var res = redis.rpush('SONGS', JSON.stringify(record), function(err, id){
             if (!err){
-                record['id'] = id;
+                record['id'] = id - 1;
                 io.emit('message', record);
             }
         });
