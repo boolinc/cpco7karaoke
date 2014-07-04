@@ -26,55 +26,44 @@ io.on('connection', function(socket){
     update(redis, socket);
 
     // Social events
-    socket.on('like', function(id){
-        console.log(id);
+    socket.on('like', function(id, record){
         redis.lrange('SONGS', id, id, function(err, songs){
-
-            console.log("Songs: %j", songs);
-
-            record = JSON.parse(songs[0]);
-            console.log(record);
+            record = songs[0];
             record.likes += 1;
-            redis.lset('SONGS', id, JSON.stringify(record));
+            redis.lset('SONGS', id, record);
 
             record['id'] = id;
             io.emit('update', record);
         });
     });
 
-    socket.on('unlike', function(id){
+    socket.on('unlike', function(record){
         redis.lrange('SONGS', id, id, function(err, songs){
-
-            record = JSON.parse(songs[0]);
-            console.log(record);
+            record = songs[0];
             record.likes -= 1;
-            redis.lset('SONGS', id, JSON.stringify(record));
+            redis.lset('SONGS', id, record);
 
             record['id'] = id;
             io.emit('update', record);
         });
     });
 
-    socket.on('dislike', function(id){
+    socket.on('dislike', function(record){
         redis.lrange('SONGS', id, id, function(err, songs){
-
-            record = JSON.parse(songs[0]);
-            console.log(record);
+            record = songs[0];
             record.dislikes += 1;
-            redis.lset('SONGS', id, JSON.stringify(record));
+            redis.lset('SONGS', id, record);
 
             record['id'] = id;
             io.emit('update', record);
         });
     });
 
-    socket.on('undislike', function(id){
+    socket.on('undislike', function(record){
         redis.lrange('SONGS', id, id, function(err, songs){
-
-            record = JSON.parse(songs[0]);
-            console.log(record);
+            record = songs[0];
             record.dislikes -= 1;
-            redis.lset('SONGS', id, JSON.stringify(record));
+            redis.lset('SONGS', id, record);
 
             record['id'] = id;
             io.emit('update', record);

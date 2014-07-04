@@ -41,8 +41,6 @@
 
     function like(id){
 
-        console.log(id);
-
         if($('#like-'+id).attr('class') == 'fa fa-thumbs-up like'){
             $('#like-'+id).attr('class', 'fa fa-thumbs-up onLike')
             socket.emit('like', id);
@@ -54,8 +52,6 @@
         }
     }
     function dislike(id){
-
-        console.log(id);
 
         if($('#dislike-'+id).attr('class') == 'fa fa-thumbs-down dislike'){
             $('#dislike-'+id).attr('class', 'fa fa-thumbs-down onDislike')
@@ -78,9 +74,11 @@
             return false;
         });
 
-        socket.on('message', function(data){
+        socket.on('update', function(record){
+            
+        })
 
-            console.log(data)
+        socket.on('message', function(data){
             $('#chatBody').append(
                 $('<li>')
                 .addClass('list-group-item')
