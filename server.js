@@ -5,18 +5,21 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var redis = require('redis').createClient();
 
-function update(redis, socket){
+function init(redis, socket){
+
     //Init
     console.log('Conexión detectada');
+
+    var responseObj = [];
     redis.lrange('SONGS', 0, -1, function(err, records){
         if(!err){
-            console.log(records);
-            records.forEach(function(record, i){
-                console.log("%s: %s", i, record);
-                record = JSON.parse(record);
-                record['id'] = i;
-                socket.emit('init', record);
-            });
+            for(id in records){
+                var record = JSON.parse(records[id]);
+                record['id'] = id;
+                responseObj.push(record);
+            }
+            console.log(responseObj);
+            socket.emit('init', responseObj);
         }
     });
 }
@@ -24,7 +27,7 @@ function update(redis, socket){
 
 io.on('connection', function(socket){
 
-    update(redis, socket);
+    init(redis, socket);
 
     // Social events
     socket.on('like', function(id){

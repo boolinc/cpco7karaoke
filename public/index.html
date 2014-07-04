@@ -14,6 +14,7 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="http://momentjs.com/downloads/moment.min.js"></script>
 
     <link rel="stylesheet" href="/css/font-awesome.min.css" charset="utf-8">
 
@@ -38,6 +39,44 @@
     <script>
 
     var socket = io();
+
+    function fecha(data){
+        var dt = new Date(data), today = new Date();
+
+        var res = " ";
+        if(dt.setHours(0,0,0,0) == today.setHours(0,0,0,0)){
+            res += moment(data).lang('es', {
+                relativeTime : {
+                    future: "en %s",
+                    past:   "hace %s",
+                    s:  "segundos",
+                    m:  "un minuto",
+                    mm: "%d minutos",
+                    h:  "una hora",
+                    hh: "%d horas",
+                    d:  "un día",
+                    dd: "%d días",
+                    M:  "un mes",
+                    MM: "%d meses",
+                    y:  "un año",
+                    yy: "%d años"
+                }
+            }).fromNow(true);
+        } else {
+
+            var primeraM = function(string){
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+            var options = { weekday: "long", year: "numeric", month: "short",
+            day: "numeric", hour:'2-digit', minute: '2-digit', hour12: 'true' };
+
+            date = new Date(data);
+
+            res += primeraM(date.toLocaleDateString("es-CO", options));
+        }
+        return res;
+    }
 
     function like(id){
 
@@ -101,14 +140,6 @@
         })
 
         var message = function(data){
-
-            var primeraM = function(string){ return string.charAt(0).toUpperCase() + string.slice(1); }
-
-            var options = { weekday: "long", year: "numeric", month: "short",
-            day: "numeric", hour:'2-digit', minute: '2-digit', hour12: 'true' };
-
-            date = new Date(data.date);
-
 
             $('#chatBody').append(
                 $('<li>')
@@ -178,7 +209,7 @@
                             )
                         )
                     )
-                    .append(
+                    .append(  data.date != null ?
                         $('<div>')
                         .addClass('col-md-12')
                         .append(
@@ -187,20 +218,27 @@
                         )
                         .append(
                             $('<small>')
-                            .text(' ' + primeraM(date.toLocaleDateString("es-CO", options)))
-                        )
+                            .text(fecha(data.date))
+                        ) :
+                        $('<div>')
                     )
                 )
             );
         };
 
         socket.on('init', function(data){
-            message(data);
+            console.log(data);
+            for(msg in data){
+                console.log(msg);
+                var msg = data[msg];
+                message(msg);
+            }
+            $("#chatBody").scrollTop($('#chatBody')[0].scrollHeight);
         });
 
         socket.on('message', function(data){
             message(data);
-           $("#chatBody").animate({
+            $("#chatBody").animate({
                 scrollTop: $('#chatBody')[0].scrollHeight
             }, 1000);
         });
@@ -211,7 +249,7 @@
 
     <header class="page-header">
         <h1 class="text-center">
-            #CPCO7Chat <small>by
+            #CPCO7Chat #CPCO7Karaoke <small>by
                 <a href="http://www.twitter.com/gentebool">
                     @GenteBool
                 </a>
