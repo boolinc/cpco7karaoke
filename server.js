@@ -15,7 +15,7 @@ function update(redis, socket){
                 console.log("%s: %s", i, record);
                 record = JSON.parse(record);
                 record['id'] = i;
-                socket.emit('message', record);
+                socket.emit('init', record);
             });
         }
     });
