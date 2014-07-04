@@ -29,7 +29,10 @@ io.on('connection', function(socket){
     socket.on('like', function(id){
         console.log(id);
         redis.lrange('SONGS', id, id, function(err, songs){
+
+
             record = songs[0];
+            console.log(record);
             record.likes += 1;
             redis.lset('SONGS', id, record);
 
@@ -40,7 +43,9 @@ io.on('connection', function(socket){
 
     socket.on('unlike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
+
             record = songs[0];
+            console.log(record);
             record.likes -= 1;
             redis.lset('SONGS', id, record);
 
@@ -51,7 +56,9 @@ io.on('connection', function(socket){
 
     socket.on('dislike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
+
             record = songs[0];
+            console.log(record);
             record.dislikes += 1;
             redis.lset('SONGS', id, record);
 
@@ -62,7 +69,9 @@ io.on('connection', function(socket){
 
     socket.on('undislike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
+
             record = songs[0];
+            console.log(record);
             record.dislikes -= 1;
             redis.lset('SONGS', id, record);
 
