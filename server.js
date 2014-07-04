@@ -26,7 +26,7 @@ io.on('connection', function(socket){
     update(redis, socket);
 
     // Social events
-    socket.on('like', function(id, record){
+    socket.on('like', function(id){
         console.log(id);
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
@@ -38,7 +38,7 @@ io.on('connection', function(socket){
         });
     });
 
-    socket.on('unlike', function(id, record){
+    socket.on('unlike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
             record.likes -= 1;
@@ -49,7 +49,7 @@ io.on('connection', function(socket){
         });
     });
 
-    socket.on('dislike', function(id, record){
+    socket.on('dislike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
             record.dislikes += 1;
@@ -60,7 +60,7 @@ io.on('connection', function(socket){
         });
     });
 
-    socket.on('undislike', function(id, record){
+    socket.on('undislike', function(id){
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
             record.dislikes -= 1;
