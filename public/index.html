@@ -15,11 +15,22 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="/css/font-awesome.min.css" charset="utf-8">
+
 
     <style>
     #chatBody{
         overflow: scroll;
         height: 450px;
+    }
+    #dislike, #like{
+        color : gray;
+    }
+    #onDislike{
+        color : #d9534f;
+    }
+    #onLike{
+        color : #428bca;
     }
     </style>
 
@@ -43,14 +54,58 @@
                 .addClass('list-group-item')
 
                 .append(
-                    $('<strong>')
-                    .addClass('list-group-item-heading')
-                    .text('@' + data.twitter)
-                )
-                .append(
-                    $('<p>')
-                    .addClass('list-group-item-text')
-                    .text(data.song)
+                    $('<div>')
+                    .addClass('row')
+
+                    .append(
+                        $('<div>')
+                        .addClass('col-md-11')
+
+                        .append(
+                            $('<strong>')
+                            .addClass('list-group-item-heading')
+                            .text('@' + data.twitter)
+                        )
+                        .append(
+                            $('<p>')
+                            .addClass('list-group-item-text')
+                            .text(data.song)
+                        )
+                    )
+                    .append(
+                            $('<div>')
+                        .addClass('col-md-1 row')
+
+                        .append(
+                            $('<div>')
+                            .addClass('col-md-6')
+                            .append(
+                                $('<a>')
+                                .addClass('fa fa-thumbs-down')
+                                .attr('id','onDislike')
+                                .attr('href','htttp://CPCO7Karaoke.gentebool.co')
+                            )
+                            .append(
+                                $('h6')
+                                .text('20')
+                            )
+                        )
+
+                        .append(
+                            $('<div>')
+                            .addClass('col-md-6')
+                            .append(
+                                $('<a>')
+                                .addClass('fa fa-thumbs-up')
+                                .attr('id','onLike')
+                                .attr('href','htttp://CPCO7Karaoke.gentebool.co')
+                            )
+                            .append(
+                                $('<h6>')
+                                .text('1000')
+                            )
+                        )
+                    )
                 )
             );
         });
