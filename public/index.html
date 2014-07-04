@@ -83,6 +83,9 @@
     $(document).ready(function(){
 
         $('#form').submit(function(){
+            date = new Date();
+
+            console.log(date.getDate());
             socket.emit('message', $('#twitter').val(), $('#song').val());
             $('#twitter').val('');
             $('#song').val('');
@@ -98,7 +101,7 @@
             $('#like-numbers-'+record.id).text(''+record.likes+'');
         })
 
-        socket.on('message', function(data){
+        var message = function(data){
             $('#chatBody').append(
                 $('<li>')
                 .addClass('list-group-item')
@@ -165,12 +168,31 @@
                                 .attr('id','like-numbers-'+data.id)
                                 .text(data.likes)
                             )
-
+                        )
+                    )
+                    .append(
+                        $('<div>')
+                        .addClass('col-md-12')
+                        .append(
+                            $('<i>')
+                            .addClass('fa fa-clock-o')
+                        )
+                        .append(
+                            $('<small>')
+                            .text(' 12/12/12 12:30 pm')
                         )
                     )
                 )
             );
-            $("#chatBody").animate({
+        };
+
+        socket.on('init', function(data){
+            message(data);
+        });
+
+        socket.on('message', function(data){
+            message(data);
+           $("#chatBody").animate({
                 scrollTop: $('#chatBody')[0].scrollHeight
             }, 1000);
         });
