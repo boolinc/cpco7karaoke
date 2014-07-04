@@ -13,6 +13,7 @@ function update(redis, socket){
             records.forEach(function(record, i){
                 record = JSON.parse(record);
                 record['id'] = i;
+                console.log(record);
                 socket.emit('message', record);
             });
         }
@@ -24,24 +25,49 @@ io.on('connection', function(socket){
 
     update(redis, socket);
 
-    socket.on('like', function(id){
+    socket.on('like', function(id, record){
+        redis.lrange('SONGS', id, id, function(err, songs){
+            record = songs[0];
+            record.likes += 1;
+            redis.lset('SONGS', id, record);
 
+            record['id'] = id;
+            io.emit('update', record);
+        });
     });
 
-    socket.on('unlike', function(id){
+    socket.on('unlike', function(record){
+        redis.lrange('SONGS', id, id, function(err, songs){
+            record = songs[0];
+            record.likes -= 1;
+            redis.lset('SONGS', id, record);
 
+            record['id'] = id;
+            io.emit('update', record);
+        });
     });
 
-    socket.on('dislike', function(id){
+    socket.on('dislike', function(record){
+        redis.lrange('SONGS', id, id, function(err, songs){
+            record = songs[0];
+            record.dislikes += 1;
+            redis.lset('SONGS', id, record);
 
+            record['id'] = id;
+            io.emit('update', record);
+        });
     });
 
-    socket.on('undislike', function(id){
-        
+    socket.on('undislike', function(record){
+        redis.lrange('SONGS', id, id, function(err, songs){
+            record = songs[0];
+            record.dislikes -= 1;
+            redis.lset('SONGS', id, record);
+
+            record['id'] = id;
+            io.emit('update', record);
+        });
     });
-
-
-
 
     //Get a song message
     socket.on('message', function(twitter, song){
