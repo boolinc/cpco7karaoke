@@ -25,6 +25,7 @@ io.on('connection', function(socket){
 
     update(redis, socket);
 
+    // Social events
     socket.on('like', function(id, record){
         redis.lrange('SONGS', id, id, function(err, songs){
             record = songs[0];
