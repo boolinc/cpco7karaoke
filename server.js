@@ -14,7 +14,7 @@ function init(redis, socket){
     console.log('Conexión detectada');
 
     var responseObj = [];
-    redis.lrange('TABLE', 0, -1, function(err, records){
+    redis.lrange(table, 0, -1, function(err, records){
         if(!err){
             for(id in records){
                 var record = JSON.parse(records[id]);
@@ -40,7 +40,7 @@ io.on('connection', function(socket){
             record = JSON.parse(songs[0]);
 
             record.likes += 1;
-            redis.lset('TABLE', id, JSON.stringify(record));
+            redis.lset(table, id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
@@ -52,7 +52,7 @@ io.on('connection', function(socket){
 
             record = JSON.parse(songs[0]);
             record.likes -= 1;
-            redis.lset('TABLE', id, JSON.stringify(record));
+            redis.lset(table, id, JSON.stringify(record));
 
             record['id'] = id;
             io.emit('update', record);
@@ -72,7 +72,7 @@ io.on('connection', function(socket){
     });
 
     socket.on('undislike', function(id){
-        redis.lrange('TABLE', id, id, function(err, songs){
+        redis.lrange(table, id, id, function(err, songs){
 
             record = JSON.parse(songs[0]);
             record.dislikes -= 1;
